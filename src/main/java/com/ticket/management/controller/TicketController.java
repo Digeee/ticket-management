@@ -20,8 +20,7 @@ public class TicketController {
     public String viewHomePage(Model model) {
         List<Ticket> listTickets = ticketService.getAllTickets();
         model.addAttribute("listTickets", listTickets);
-        model.addAttribute("template", "index :: content");
-        return "layout";
+        return "index";
     }
     
     // Show form for creating a new ticket
@@ -29,8 +28,7 @@ public class TicketController {
     public String showNewTicketForm(Model model) {
         Ticket ticket = new Ticket();
         model.addAttribute("ticket", ticket);
-        model.addAttribute("template", "new_ticket :: content");
-        return "layout";
+        return "new_ticket";
     }
     
     // Save a new ticket
@@ -45,8 +43,7 @@ public class TicketController {
     public String showFormForUpdate(@PathVariable(value = "id") long id, Model model) {
         Ticket ticket = ticketService.getTicketById(id).orElse(null);
         model.addAttribute("ticket", ticket);
-        model.addAttribute("template", "update_ticket :: content");
-        return "layout";
+        return "update_ticket";
     }
     
     // Delete a ticket
@@ -61,7 +58,6 @@ public class TicketController {
     public String searchTickets(@RequestParam("keyword") String keyword, Model model) {
         List<Ticket> listTickets = ticketService.searchTickets(keyword);
         model.addAttribute("listTickets", listTickets);
-        model.addAttribute("template", "index :: content");
-        return "layout";
+        return "index";
     }
 }

@@ -35,7 +35,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="priority" class="form-label">Priority</label>
                                     <select class="form-select" id="priority" th:field="*{priority}" required>
-                                        <option th:each="priority : ${T(com.ticket.management.model.Ticket$Priority).values()}"
+                                        <option th:each="priority : ${@ticketService.getPriorityValues()}"
                                                 th:value="${priority}"
                                                 th:text="${priority}"
                                                 th:selected="${ticket.priority == priority}">
@@ -46,7 +46,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="status" class="form-label">Status</label>
                                     <select class="form-select" id="status" th:field="*{status}" required>
-                                        <option th:each="status : ${T(com.ticket.management.model.Ticket$Status).values()}"
+                                        <option th:each="status : ${@ticketService.getStatusValues()}"
                                                 th:value="${status}"
                                                 th:text="${status}"
                                                 th:selected="${ticket.status == status}">
