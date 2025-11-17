@@ -66,6 +66,15 @@ public class Ticket {
         this.priority = priority;
         this.status = status;
     }
+    
+    // New constructor that includes assignedTo
+    public Ticket(String title, String description, Priority priority, Status status, String assignedTo) {
+        this.title = title;
+        this.description = description;
+        this.priority = priority;
+        this.status = status;
+        this.assignedTo = assignedTo;
+    }
 
     // Getters and Setters
     public Long getId() {

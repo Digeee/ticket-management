@@ -349,7 +349,12 @@
                                             <tr th:each="ticket : ${listTickets}" 
                                                 th:classappend="${ticket.priority.name() == 'HIGH' || ticket.priority.name() == 'URGENT'} ? 'table-danger' : (${ticket.priority.name() == 'MEDIUM'} ? 'table-warning' : 'table-success')">
                                                 <td th:text="${ticket.id}"></td>
-                                                <td th:text="${ticket.title}"></td>
+                                                <td>
+                                                    <a th:href="@{/ticket/{id}(id=${ticket.id})}" 
+                                                       th:text="${ticket.title}" 
+                                                       class="text-decoration-none text-light">
+                                                    </a>
+                                                </td>
                                                 <td th:text="${#strings.abbreviate(ticket.description, 50)}"></td>
                                                 <td>
                                                     <span th:switch="${ticket.priority}" 
@@ -373,6 +378,10 @@
                                                 <td th:text="${#temporals.format(ticket.createdDate, 'MMM dd, yyyy')}"></td>
                                                 <td>
                                                     <div class="btn-group" role="group">
+                                                        <a th:href="@{/ticket/{id}(id=${ticket.id})}" 
+                                                           class="btn btn-sm btn-outline-light">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
                                                         <a th:href="@{/showFormForUpdate/{id}(id=${ticket.id})}" 
                                                            class="btn btn-sm btn-outline-light">
                                                             <i class="fas fa-edit"></i>

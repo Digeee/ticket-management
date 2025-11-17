@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TicketFlow - Ticket Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #ec4899;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            --glass-backdrop: blur(12px);
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            min-height: 100vh;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: var(--light-color);
+            overflow-x: hidden;
+        }
+        
+        /* Glass Morphism Effects */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-backdrop);
+            -webkit-backdrop-filter: var(--glass-backdrop);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--glass-shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(31, 38, 135, 0.25);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .glass-navbar {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .glass-footer {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid var(--glass-border);
+        }
+        
+        /* Modern Typography */
+        .display-heading {
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .sub-heading {
+            font-weight: 600;
+            color: #cbd5e1;
+        }
+        
+        /* Vibrant Buttons */
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 15px;
+            padding: 10px 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(99, 102, 241, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            color: var(--light-color);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.03);
+        }
+        
+        /* Form Elements */
+        .form-control, .form-select {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            color: var(--light-color);
+            backdrop-filter: blur(5px);
+            padding: 12px 15px;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.25);
+            color: var(--light-color);
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+        
+        /* Comment and Activity Styles */
+        .comment-card, .activity-card, .attachment-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .comment-card:hover, .activity-card:hover, .attachment-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .user-badge {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 20px;
+            padding: 3px 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .timestamp {
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(99, 102, 241, 0.2);
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .glass-card {
+                border-radius: 15px;
+            }
+            
+            .display-heading {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="glass-navbar navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <i class="fas fa-ticket-alt me-2 floating"></i>
+                <span class="fw-bold fs-4">TicketFlow</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home me-1"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/showNewTicketForm"><i class="fas fa-plus-circle me-1"></i> New Ticket</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="glass-card p-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                        <div>
+                            <h1 class="display-heading mb-2" th:text="${ticket.title}">Ticket Title</h1>
+                            <p class="sub-heading mb-0" th:text="${ticket.description}">Ticket Description</p>
+                        </div>
+                        <div class="mt-3 mt-md-0">
+                            <a th:href="@{/showFormForUpdate/{id}(id=${ticket.id})}" class="btn btn-primary me-2">
+                                <i class="fas fa-edit me-2"></i>Edit Ticket
+                            </a>
+                            <a href="/" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to List
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <!-- Left Column - Ticket Info and Comments -->
+            <div class="col-md-8">
+                <!-- Ticket Info -->
+                <div class="glass-card p-4 mb-4">
+                    <h5 class="mb-4">
+                        <i class="fas fa-info-circle me-2"></i>Ticket Information
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>ID:</strong> <span th:text="${ticket.id}">1</span></p>
+                            <p><strong>Priority:</strong> 
+                                <span th:switch="${ticket.priority}" 
+                                      th:class="${ticket.priority.name() == 'HIGH' || ticket.priority.name() == 'URGENT'} ? 'text-danger' : (${ticket.priority.name() == 'MEDIUM'} ? 'text-warning' : 'text-success')">
+                                    <span th:case="LOW">Low</span>
+                                    <span th:case="MEDIUM">Medium</span>
+                                    <span th:case="HIGH">High</span>
+                                    <span th:case="URGENT">Urgent</span>
+                                </span>
+                            </p>
+                            <p><strong>Assigned To:</strong> <span th:text="${ticket.assignedTo ?: 'Unassigned'}">Unassigned</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Status:</strong> 
+                                <span th:switch="${ticket.status}" 
+                                      th:class="${ticket.status.name() == 'OPEN'} ? 'text-info' : (${ticket.status.name() == 'IN_PROGRESS'} ? 'text-warning' : (${ticket.status.name() == 'RESOLVED'} ? 'text-success' : 'text-secondary'))">
+                                    <span th:case="OPEN">Open</span>
+                                    <span th:case="IN_PROGRESS">In Progress</span>
+                                    <span th:case="RESOLVED">Resolved</span>
+                                    <span th:case="CLOSED">Closed</span>
+                                </span>
+                            </p>
+                            <p><strong>Created:</strong> <span th:text="${#temporals.format(ticket.createdDate, 'MMM dd, yyyy HH:mm')}">Jan 01, 2023</span></p>
+                            <p><strong>Last Updated:</strong> <span th:text="${#temporals.format(ticket.updatedDate, 'MMM dd, yyyy HH:mm')}">Jan 01, 2023</span></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Comments Section -->
+                <div class="glass-card p-4 mb-4">
+                    <h5 class="mb-4">
+                        <i class="fas fa-comments me-2"></i>Comments
+                        <span class="badge bg-primary ms-2" th:text="${#lists.size(comments)}">0</span>
+                    </h5>
+                    
+                    <!-- Add Comment Form -->
+                    <form th:action="@{/ticket/{id}/addComment(id=${ticket.id})}" method="post" class="mb-4">
+                        <div class="mb-3">
+                            <label for="userName" class="form-label">Your Name</label>
+                            <input type="text" class="form-control" id="userName" name="userName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Comment</label>
+                            <textarea class="form-control" id="content" name="content" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane me-2"></i>Post Comment
+                        </button>
+                    </form>
+                    
+                    <!-- Comments List -->
+                    <div th:if="${#lists.isEmpty(comments)}" class="text-center py-4">
+                        <i class="fas fa-comment-slash fa-2x text-muted mb-3"></i>
+                        <p class="text-muted mb-0">No comments yet. Be the first to comment!</p>
+                    </div>
+                    
+                    <div th:unless="${#lists.isEmpty(comments)}">
+                        <div th:each="comment : ${comments}" class="comment-card p-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <span class="user-badge me-2" th:text="${comment.userName}">User</span>
+                                    <span class="timestamp" th:text="${#temporals.format(comment.createdDate, 'MMM dd, yyyy HH:mm')}">Jan 01, 2023</span>
+                                </div>
+                            </div>
+                            <p class="mt-2 mb-0" th:text="${comment.content}">Comment content</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column - Attachments and Activity Log -->
+            <div class="col-md-4">
+                <!-- Attachments Section -->
+                <div class="glass-card p-4 mb-4">
+                    <h5 class="mb-4">
+                        <i class="fas fa-paperclip me-2"></i>Attachments
+                        <span class="badge bg-primary ms-2" th:text="${#lists.size(attachments)}">0</span>
+                    </h5>
+                    
+                    <!-- Upload Attachment Form -->
+                    <form th:action="@{/ticket/{id}/uploadAttachment(id=${ticket.id})}" method="post" enctype="multipart/form-data" class="mb-4">
+                        <div class="mb-3">
+                            <label for="uploadedBy" class="form-label">Your Name</label>
+                            <input type="text" class="form-control" id="uploadedBy" name="uploadedBy" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="file" class="form-label">File</label>
+                            <input type="file" class="form-control" id="file" name="file" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-upload me-2"></i>Upload File
+                        </button>
+                    </form>
+                    
+                    <!-- Attachments List -->
+                    <div th:if="${#lists.isEmpty(attachments)}" class="text-center py-3">
+                        <i class="fas fa-file-alt fa-2x text-muted mb-2"></i>
+                        <p class="text-muted mb-0 small">No attachments yet</p>
+                    </div>
+                    
+                    <div th:unless="${#lists.isEmpty(attachments)}">
+                        <div th:each="attachment : ${attachments}" class="attachment-card p-3">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <i class="fas fa-file fa-2x text-primary"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1" th:text="${attachment.fileName}">filename.pdf</h6>
+                                    <p class="mb-1 small text-muted" th:text="${attachment.fileType}">PDF Document</p>
+                                    <p class="mb-0 small" th:text="${#temporals.format(attachment.uploadDate, 'MMM dd, yyyy')}">Jan 01, 2023</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Activity Log Section -->
+                <div class="glass-card p-4">
+                    <h5 class="mb-4">
+                        <i class="fas fa-history me-2"></i>Activity Log
+                        <span class="badge bg-primary ms-2" th:text="${#lists.size(activityLogs)}">0</span>
+                    </h5>
+                    
+                    <div th:if="${#lists.isEmpty(activityLogs)}" class="text-center py-3">
+                        <i class="fas fa-history fa-2x text-muted mb-2"></i>
+                        <p class="text-muted mb-0 small">No activity yet</p>
+                    </div>
+                    
+                    <div th:unless="${#lists.isEmpty(activityLogs)}">
+                        <div th:each="log : ${activityLogs}" class="activity-card p-3">
+                            <div class="d-flex">
+                                <div class="activity-icon me-3">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1" th:text="${log.action}">Action</h6>
+                                    <p class="mb-1 small" th:text="${log.description}">Description</p>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="user-badge small" th:text="${log.performedBy}">User</span>
+                                        <span class="timestamp small" th:text="${#temporals.format(log.performedDate, 'MMM dd, yyyy HH:mm')}">Jan 01, 2023</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="glass-footer mt-auto py-4">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2025 TicketFlow Management System. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
