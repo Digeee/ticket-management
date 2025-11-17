@@ -45,4 +45,13 @@ public class TicketService {
     public List<Ticket> getTicketsByAssignee(String assignee) {
         return ticketRepository.findByAssignedToContainingIgnoreCase(assignee);
     }
+    
+    // Methods to provide enum values for Thymeleaf templates
+    public Ticket.Priority[] getPriorityValues() {
+        return Ticket.Priority.values();
+    }
+    
+    public Ticket.Status[] getStatusValues() {
+        return Ticket.Status.values();
+    }
 }

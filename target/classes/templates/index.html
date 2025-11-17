@@ -39,14 +39,14 @@
             <div class="col-md-3">
                 <div class="stats-card" style="background: linear-gradient(135deg, #ff9800, #f57c00);">
                     <i class="fas fa-clock"></i>
-                    <h3 th:text="${#lists.size(#lists.filter(listTickets, 'status == T(com.ticket.management.model.Ticket$Status).OPEN'))}">0</h3>
+                    <h3 th:text="${#lists.size(#lists.filter(listTickets, 'status.name() == \'OPEN\''))}">0</h3>
                     <p>Open Tickets</p>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stats-card" style="background: linear-gradient(135deg, #4caf50, #388e3c);">
                     <i class="fas fa-check-circle"></i>
-                    <h3 th:text="${#lists.size(#lists.filter(listTickets, 'status == T(com.ticket.management.model.Ticket$Status).RESOLVED'))}">0</h3>
+                    <h3 th:text="${#lists.size(#lists.filter(listTickets, 'status.name() == \'RESOLVED\''))}">0</h3>
                     <p>Resolved</p>
                 </div>
             </div>
