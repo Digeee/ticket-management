@@ -37,19 +37,24 @@ public class TicketService {
     }
 
     public void saveTicket(Ticket ticket) {
+        // Save the ticket first
+        Ticket savedTicket = ticketRepository.save(ticket);
+        
         // If this is a new ticket, add a creation activity log
         if (ticket.getId() == null) {
-            ticketRepository.save(ticket);
-            addActivityLog(ticket.getId(), "Ticket Created", "Ticket was created", "System");
-        } else {
-            ticketRepository.save(ticket);
+            addActivityLog(savedTicket.getId(), "Ticket Created", "Ticket was created", "System");
         }
     }
 
     public void deleteTicket(long id) {
         Optional<Ticket> ticket = ticketRepository.findById(id);
         if (ticket.isPresent()) {
-            addActivityLog(id, "Ticket Deleted", "Ticket was deleted", "System");
+            // Delete related comments, attachments, and activity logs first
+            commentRepository.deleteByTicketId(id);
+            attachmentRepository.deleteByTicketId(id);
+            activityLogRepository.deleteByTicketId(id);
+            
+            // Then delete the ticket
             ticketRepository.deleteById(id);
         }
     }
