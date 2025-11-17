@@ -187,14 +187,14 @@
                 <div class="col-md-3">
                     <div class="stats-card" style="background: linear-gradient(135deg, #ff9800, #f57c00);">
                         <i class="fas fa-clock"></i>
-                        <h3 th:text="${#lists.size(#lists.filter(listTickets, 'status.name() eq &quot;OPEN&quot;'))}">0</h3>
+                        <h3>0</h3>
                         <p>Open Tickets</p>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="stats-card" style="background: linear-gradient(135deg, #4caf50, #388e3c);">
                         <i class="fas fa-check-circle"></i>
-                        <h3 th:text="${#lists.size(#lists.filter(listTickets, 'status.name() eq &quot;RESOLVED&quot;'))}">0</h3>
+                        <h3>0</h3>
                         <p>Resolved</p>
                     </div>
                 </div>
@@ -274,16 +274,13 @@
                                         </thead>
                                         <tbody>
                                             <tr th:each="ticket : ${listTickets}" 
-                                                th:classappend="${ticket.priority.name() == 'HIGH' || ticket.priority.name() == 'URGENT'} ? 'table-danger' : 
-                                                                  ${ticket.priority.name() == 'MEDIUM'} ? 'table-warning' : 'table-success'">
+                                                th:classappend="${ticket.priority.name() == 'HIGH' || ticket.priority.name() == 'URGENT'} ? 'table-danger' : (${ticket.priority.name() == 'MEDIUM'} ? 'table-warning' : 'table-success')">
                                                 <td th:text="${ticket.id}"></td>
                                                 <td th:text="${ticket.title}"></td>
                                                 <td th:text="${#strings.abbreviate(ticket.description, 50)}"></td>
                                                 <td>
                                                     <span th:switch="${ticket.priority}" 
-                                                          th:class="'badge ' + 
-                                                                    (${ticket.priority.name() == 'HIGH' || ticket.priority.name() == 'URGENT'} ? 'bg-danger' : 
-                                                                     ${ticket.priority.name() == 'MEDIUM'} ? 'bg-warning' : 'bg-success')">
+                                                          th:class="'badge ' + (${ticket.priority.name() == 'HIGH' || ticket.priority.name() == 'URGENT'} ? 'bg-danger' : (${ticket.priority.name() == 'MEDIUM'} ? 'bg-warning' : 'bg-success'))">
                                                         <span th:case="LOW">Low</span>
                                                         <span th:case="MEDIUM">Medium</span>
                                                         <span th:case="HIGH">High</span>
@@ -292,10 +289,7 @@
                                                 </td>
                                                 <td>
                                                     <span th:switch="${ticket.status}" 
-                                                          th:class="'badge ' + 
-                                                                    (${ticket.status.name() == 'OPEN'} ? 'bg-info' : 
-                                                                     ${ticket.status.name() == 'IN_PROGRESS'} ? 'bg-warning' : 
-                                                                     ${ticket.status.name() == 'RESOLVED'} ? 'bg-success' : 'bg-secondary')">
+                                                          th:class="'badge ' + (${ticket.status.name() == 'OPEN'} ? 'bg-info' : (${ticket.status.name() == 'IN_PROGRESS'} ? 'bg-warning' : (${ticket.status.name() == 'RESOLVED'} ? 'bg-success' : 'bg-secondary')))">
                                                         <span th:case="OPEN">Open</span>
                                                         <span th:case="IN_PROGRESS">In Progress</span>
                                                         <span th:case="RESOLVED">Resolved</span>
