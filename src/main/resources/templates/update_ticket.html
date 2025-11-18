@@ -7,28 +7,58 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Base styles for both themes */
         :root {
             --primary-color: #6366f1;
             --secondary-color: #8b5cf6;
             --accent-color: #ec4899;
-            --dark-color: #1e293b;
-            --light-color: #f8fafc;
             --success-color: #10b981;
             --warning-color: #f59e0b;
             --danger-color: #ef4444;
             --info-color: #3b82f6;
-            --glass-bg: rgba(255, 255, 255, 0.15);
-            --glass-border: rgba(255, 255, 255, 0.2);
             --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
             --glass-backdrop: blur(12px);
+            --transition-speed: 0.3s;
+            --font-family: 'Inter', 'Space Grotesk', 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        
+        /* Light theme variables */
+        :root[data-theme="light"] {
+            --bg-gradient-start: #0f172a;
+            --bg-gradient-end: #1e293b;
+            --text-color: #f8fafc;
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --nav-bg: rgba(30, 41, 59, 0.7);
+            --footer-bg: rgba(15, 23, 42, 0.7);
+            --form-bg: rgba(255, 255, 255, 0.08);
+            --form-focus-bg: rgba(255, 255, 255, 0.15);
+            --hover-glass-bg: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Dark theme variables */
+        :root[data-theme="dark"] {
+            --bg-gradient-start: #020617;
+            --bg-gradient-end: #0f172a;
+            --text-color: #f1f5f9;
+            --glass-bg: rgba(30, 41, 59, 0.3);
+            --glass-border: rgba(71, 85, 105, 0.4);
+            --card-bg: rgba(30, 41, 59, 0.2);
+            --nav-bg: rgba(15, 23, 42, 0.8);
+            --footer-bg: rgba(2, 8, 23, 0.8);
+            --form-bg: rgba(30, 41, 59, 0.2);
+            --form-focus-bg: rgba(30, 41, 59, 0.4);
+            --hover-glass-bg: rgba(30, 41, 59, 0.5);
         }
         
         body {
-            background: linear-gradient(135deg, #0f172a, #1e293b);
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
             min-height: 100vh;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            color: var(--light-color);
+            font-family: var(--font-family);
+            color: var(--text-color);
             overflow-x: hidden;
+            transition: background var(--transition-speed);
         }
         
         /* Glass Morphism Effects */
@@ -39,27 +69,29 @@
             border: 1px solid var(--glass-border);
             border-radius: 20px;
             box-shadow: var(--glass-shadow);
-            transition: all 0.3s ease;
+            transition: all var(--transition-speed) ease, background var(--transition-speed);
         }
         
         .glass-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 40px rgba(31, 38, 135, 0.25);
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--hover-glass-bg);
         }
         
         .glass-navbar {
-            background: rgba(30, 41, 59, 0.7);
+            background: var(--nav-bg);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border-bottom: 1px solid var(--glass-border);
+            transition: background var(--transition-speed);
         }
         
         .glass-footer {
-            background: rgba(15, 23, 42, 0.7);
+            background: var(--footer-bg);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border-top: 1px solid var(--glass-border);
+            transition: background var(--transition-speed);
         }
         
         /* Modern Typography */
@@ -84,7 +116,7 @@
             border-radius: 15px;
             padding: 10px 25px;
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: all var(--transition-speed) ease;
         }
         
         .btn-primary:hover {
@@ -93,38 +125,58 @@
         }
         
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--form-bg);
             border: 1px solid var(--glass-border);
             border-radius: 15px;
-            color: var(--light-color);
-            transition: all 0.3s ease;
+            color: var(--text-color);
+            transition: all var(--transition-speed) ease;
         }
         
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--hover-glass-bg);
             transform: scale(1.03);
         }
         
         /* Form Elements */
         .form-control, .form-select {
-            background: rgba(255, 255, 255, 0.08);
+            background: var(--form-bg);
             border: 1px solid var(--glass-border);
             border-radius: 15px;
-            color: var(--light-color);
+            color: var(--text-color);
             backdrop-filter: blur(5px);
             padding: 12px 15px;
+            transition: background var(--transition-speed), border-color var(--transition-speed);
         }
         
         .form-control:focus, .form-select:focus {
-            background: rgba(255, 255, 255, 0.15);
+            background: var(--form-focus-bg);
             border-color: var(--primary-color);
             box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.25);
-            color: var(--light-color);
+            color: var(--text-color);
         }
         
         .form-label {
             font-weight: 600;
             color: #e2e8f0;
+        }
+        
+        /* Theme Toggle Button */
+        .theme-toggle {
+            background: var(--form-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--hover-glass-bg);
+            transform: rotate(15deg);
         }
         
         /* Animations */
@@ -150,7 +202,7 @@
         }
     </style>
 </head>
-<body>
+<body data-theme="light">
     <!-- Navigation Bar -->
     <nav class="glass-navbar navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
@@ -167,7 +219,12 @@
                         <a class="nav-link" href="/"><i class="fas fa-home me-1"></i> Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="/showNewTicketForm"><i class="fas fa-plus-circle me-1"></i> New Ticket</a>
+                        <a class="nav-link" href="/showNewTicketForm"><i class="fas fa-plus-circle me-1"></i> New Ticket</a>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <div class="theme-toggle" id="themeToggle">
+                            <i class="fas fa-moon"></i>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -251,5 +308,37 @@
     </footer>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Theme toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = themeToggle.querySelector('i');
+            const body = document.body;
+            
+            // Check for saved theme preference or respect OS preference
+            const savedTheme = localStorage.getItem('theme');
+            const osPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme) {
+                body.setAttribute('data-theme', savedTheme);
+                themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            } else if (osPrefersDark) {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.className = 'fas fa-sun';
+            }
+            
+            // Toggle theme on button click
+            themeToggle.addEventListener('click', function() {
+                const currentTheme = body.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                body.setAttribute('data-theme', newTheme);
+                themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                
+                // Save preference to localStorage
+                localStorage.setItem('theme', newTheme);
+            });
+        });
+    </script>
 </body>
 </html>
